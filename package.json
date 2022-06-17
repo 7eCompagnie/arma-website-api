@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.7.0"
+  },
+  "name": "arma-website-api",
+  "version": "1.0.0",
+  "description": "The API of the 7th Company's Arma 3 website",
+  "main": "index.js",
+  "repository": "git@github.com:7eCompagnie/arma-website-api.git",
+  "author": "Sn0w <clement.ozor@protonmail.com>",
+  "license": "MIT"
+}
