@@ -16,7 +16,6 @@ const userRoutes = require('./routes/user.route');
 
 app.use('/api/v1/users', userRoutes);
 
-
 app.listen(port, () => {
     console.log(`[SUCCESS] => Server is running on port ${port}.`);
 });
