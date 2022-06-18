@@ -12,4 +12,22 @@ User.getAllUsers = async (result) => {
     return await database.db.collection('users').find({}).toArray();
 }
 
+User.getUser = async (identifier, result) => {
+    return await database.db.collection('users').findOne({identifier: identifier});
+}
+
+User.createUser = async (user, result) => {
+    await database.db.collection('users').insertOne(user);
+    return await User.getUser(user.identifier, result);
+}
+
+User.updateUser = async (identifier, user, result) => {
+    await database.db.collection('users').updateOne({identifier: identifier}, {$set: user});
+    return await User.getUser(identifier, result);
+}
+
+User.deleteUser = async (identifier, result) => {
+    return await database.db.collection('users').deleteOne({identifier: identifier});
+}
+
 module.exports = User;
