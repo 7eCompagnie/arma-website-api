@@ -1,4 +1,4 @@
-const db = require('../configs/db.config');
+const database = require('../configs/db.config');
 
 let User = (user) => {
     this.identifier     = user.identifier;
@@ -8,11 +8,8 @@ let User = (user) => {
     this.avatar         = user.avatar;
 }
 
-User.getAllUsers = (result) => {
-    db.collection('users').find().toArray(function(err, res) {
-        if (err) throw err;
-        result(null, res);
-    });
+User.getAllUsers = async (result) => {
+    return await database.db.collection('users').find({}).toArray();
 }
 
 module.exports = User;

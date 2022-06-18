@@ -1,12 +1,14 @@
 // Load modules
 const express = require('express');
 const dotenv = require('dotenv').config();
+const database = require('./configs/db.config');
 
 // Variables
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
 
 app.use(express.json());
+database.connect();
 
 // Routes
 const userRoutes = require('./routes/user.route');
