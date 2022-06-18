@@ -26,4 +26,8 @@ User.updateUser = async (identifier, user, result) => {
     return await User.getUser(identifier, result);
 }
 
+User.deleteUser = async (identifier, result) => {
+    return await database.db.collection('users').deleteOne({identifier: identifier});
+}
+
 module.exports = User;
