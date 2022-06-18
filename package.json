@@ -4,6 +4,10 @@
     "express": "^4.18.1",
     "mongodb": "^4.7.0"
   },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
   "name": "arma-website-api",
   "version": "1.0.0",
   "description": "The API of the 7th Company's Arma 3 website",
