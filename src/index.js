@@ -16,9 +16,11 @@ database.connect();
 // Routes
 const userRoutes = require('./routes/user.route');
 const loginRoutes = require('./routes/login.route');
+const revokeRoutes = require('./routes/revoke.route');
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/login', loginRoutes);
+app.use('/api/v1/revoke', revokeRoutes);
 
 app.listen(port, () => {
     console.log(`[SUCCESS] => Server is running on port ${port}.`);
