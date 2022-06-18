@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const jwt = require("jsonwebtoken");
+const dovent = require('dotenv').config();
 
 exports.getAllUsers = async (req, res) => {
     try {
@@ -79,6 +81,28 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         const data = await User.deleteUser(req.params.identifier, res);
+
+        if (!data) {
+            res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                data: data
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+exports.getUserByToken = async (req, res) => {
+    try {
+        const payload = jwt.verify(req.params.token, process.env.JWT_SECRET_KEY);
+        const data = await User.getUser(payload.identifier, res);
 
         if (!data) {
             res.status(404).json({
