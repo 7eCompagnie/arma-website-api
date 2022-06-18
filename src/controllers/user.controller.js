@@ -55,3 +55,23 @@ exports.createUser = async (req, res) => {
         throw err;
     }
 }
+
+exports.updateUser = async (req, res) => {
+    try {
+        const data = await User.updateUser(req.params.identifier, req.body, res);
+        if (!data) {
+            res.status(404).json({
+                success: false,
+                message: 'User not found.'
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                data: data
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
