@@ -34,3 +34,24 @@ exports.getUser = async (req, res) => {
         throw err;
     }
 }
+
+exports.createUser = async (req, res) => {
+    try {
+        if (!req.body.identifier || !req.body.email || !req.body.username || !req.body.discriminator || !req.body.avatar) {
+            res.status(400).json({
+                success: false,
+                message: 'Missing required fields.'
+            });
+        } else {
+            const data = await User.createUser(req.body, res);
+
+            res.status(201).json({
+                success: true,
+                data: data
+            });
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}

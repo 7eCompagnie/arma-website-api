@@ -16,4 +16,9 @@ User.getUser = async (identifier, result) => {
     return await database.db.collection('users').findOne({identifier: identifier});
 }
 
+User.createUser = async (user, result) => {
+    await database.db.collection('users').insertOne(user);
+    return await database.db.collection('users').findOne({identifier: user.identifier});
+}
+
 module.exports = User;
