@@ -1,5 +1,6 @@
 const axios = require('axios');
 const User = require('../models/user.model');
+const jwt = require("jsonwebtoken");
 exports.login = async (req, res) => {
     try {
         if (!req.body.code) {
@@ -40,14 +41,21 @@ exports.login = async (req, res) => {
                                     if (!data) {
                                         User.createUser(userBody)
                                             .then(data => {
-                                                data.accessToken = token;
-                                                data.tokenType = tokenType;
-                                                data.expiresIn = expiresIn;
-                                                data.refreshToken = refreshToken;
+                                                const jwtToken = jwt.sign({
+                                                    identifier: data.identifier,
+                                                    email: data.email,
+                                                    username: data.username,
+                                                    discriminator: data.discriminator,
+                                                    avatar: data.avatar,
+                                                    accessToken: token,
+                                                    tokenType: tokenType,
+                                                    expiresIn: expiresIn,
+                                                    refreshToken: refreshToken
+                                                }, process.env.JWT_SECRET_KEY, { expiresIn: expiresIn });
 
                                                 res.status(201).json({
                                                     success: true,
-                                                    data: data
+                                                    data: jwtToken
                                                 });
                                             })
                                             .catch(err => {
@@ -57,14 +65,21 @@ exports.login = async (req, res) => {
                                     } else {
                                         User.updateUser(user.id, userBody)
                                             .then(data => {
-                                                data.accessToken = token;
-                                                data.tokenType = tokenType;
-                                                data.expiresIn = expiresIn;
-                                                data.refreshToken = refreshToken;
+                                                const jwtToken = jwt.sign({
+                                                    identifier: data.identifier,
+                                                    email: data.email,
+                                                    username: data.username,
+                                                    discriminator: data.discriminator,
+                                                    avatar: data.avatar,
+                                                    accessToken: token,
+                                                    tokenType: tokenType,
+                                                    expiresIn: expiresIn,
+                                                    refreshToken: refreshToken
+                                                }, process.env.JWT_SECRET_KEY, { expiresIn: expiresIn });
 
                                                 res.status(200).json({
                                                     success: true,
-                                                    data: data
+                                                    data: jwtToken
                                                 });
                                             })
                                             .catch(err => {
