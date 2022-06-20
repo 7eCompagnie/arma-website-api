@@ -13,7 +13,7 @@ exports.revoke = async (req, res) => {
             const token = req.body.token;
             const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
             const headers = {
-                ContentType: "application/xxx-www-form-urlencoded",
+                ContentType: "application/x-www-form-urlencoded",
             }
             const body = new URLSearchParams();
             body.append('token', token);

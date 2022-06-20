@@ -1,6 +1,7 @@
 const axios = require('axios');
 const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
+const {config} = require("dotenv");
 
 exports.login = async (req, res) => {
     try {
@@ -32,15 +33,23 @@ exports.login = async (req, res) => {
                             const user = response.data;
                             User.getUser(user.id)
                                 .then(data => {
-                                    const userBody = {
+                                    const newUserBody = {
                                         identifier: user.id,
                                         email: user.email,
                                         username: user.username,
                                         discriminator: user.discriminator,
                                         avatar: user.avatar,
+                                        roles: ['USER_ROLE']
+                                    }
+                                    const userBody = {
+                                        identifier: user.id,
+                                        email: user.email,
+                                        username: user.username,
+                                        discriminator: user.discriminator,
+                                        avatar: user.avatar
                                     }
                                     if (!data) {
-                                        User.createUser(userBody)
+                                        User.createUser(newUserBody)
                                             .then(data => {
                                                 const jwtToken = jwt.sign({
                                                     identifier: data.identifier,
@@ -48,6 +57,7 @@ exports.login = async (req, res) => {
                                                     username: data.username,
                                                     discriminator: data.discriminator,
                                                     avatar: data.avatar,
+                                                    roles: data.roles,
                                                     accessToken: token,
                                                     tokenType: tokenType,
                                                     expiresIn: expiresIn,
@@ -72,6 +82,7 @@ exports.login = async (req, res) => {
                                                     username: data.username,
                                                     discriminator: data.discriminator,
                                                     avatar: data.avatar,
+                                                    roles: data.roles,
                                                     accessToken: token,
                                                     tokenType: tokenType,
                                                     expiresIn: expiresIn,
