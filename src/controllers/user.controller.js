@@ -1,10 +1,24 @@
 const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
-const dovent = require('dotenv').config();
+const dotenv = require('dotenv').config();
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const data = await User.getAllUsers(res);
+        const data = await User.getAllUsers(req.query.page, res);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+exports.getMaxPages = async (req, res) => {
+    try {
+        const data = await User.getMaxPages(res);
 
         res.status(200).json({
             success: true,

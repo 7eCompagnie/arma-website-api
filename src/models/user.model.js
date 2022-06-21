@@ -8,8 +8,23 @@ let User = (user) => {
     this.avatar         = user.avatar;
 }
 
-User.getAllUsers = async (result) => {
-    return await database.db.collection('users').find({}).toArray();
+User.getMaxPages = async (result) => {
+    const perPage = 50;
+    const total = await database.db.collection('users').count();
+
+    return Math.ceil(total / perPage);
+}
+
+User.getAllUsers = async (pageIndex, result) => {
+    const perPage = 50;
+    const page = parseInt(pageIndex) || 1;
+    const startFrom = (page - 1) * perPage;
+
+    return await database.db.collection('users').find({})
+        .sort({"username": 1})
+        .skip(startFrom)
+        .limit(perPage)
+        .toArray();
 }
 
 User.getUser = async (identifier, result) => {
