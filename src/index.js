@@ -17,8 +17,10 @@ database.connect();
 const userRoutes = require('./routes/user.route');
 const loginRoutes = require('./routes/login.route');
 const revokeRoutes = require('./routes/revoke.route');
+const trainingRoutes = require('./routes/training.route');
 
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/trainings', trainingRoutes);
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/revoke', revokeRoutes);
 
