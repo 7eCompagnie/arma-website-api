@@ -5,7 +5,8 @@ let Training = (training) => {
     this.title          = training.title;
     this.description    = training.description;
     this.picture        = training.picture;
-    this.formers        = training.formers;
+    this.trainers       = training.trainers;
+    this.isOpen         = training.isOpen;
 }
 
 Training.getMaxPages = async (result) => {

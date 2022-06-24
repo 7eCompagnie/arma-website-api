@@ -53,7 +53,7 @@ exports.getTraining = async (req, res) => {
 
 exports.createTraining = async (req, res) => {
     try {
-        if (!req.body.title || !req.body.description || !req.body.picture || !req.body.formers) {
+        if (!req.body.title || !req.body.description || !req.body.picture || !req.body.trainers || !req.body.isOpen) {
             res.status(400).json({
                 success: false,
                 message: 'Missing required fields.'
