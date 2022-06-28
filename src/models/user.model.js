@@ -27,6 +27,13 @@ User.getAllUsers = async (pageIndex, result) => {
         .toArray();
 }
 
+User.getAllTrainers = async (result) => {
+
+    return await database.db.collection('users').find({roles: "TRAINER_ROLE"})
+        .sort({"username": 1})
+        .toArray();
+}
+
 User.getUser = async (identifier, result) => {
     return await database.db.collection('users').findOne({identifier: identifier});
 }

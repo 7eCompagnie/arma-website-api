@@ -16,6 +16,20 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
+exports.getAllTrainers = async (req, res) => {
+    try {
+        const data = await User.getAllTrainers(res);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 exports.getMaxPages = async (req, res) => {
     try {
         const data = await User.getMaxPages(res);
