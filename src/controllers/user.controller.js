@@ -110,7 +110,6 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        console.log(req.body);
         const data = await User.updateUser(req.params.identifier, req.body, res);
 
         if (!data) {

@@ -56,7 +56,7 @@ exports.getOperation = async (req, res) => {
 exports.createOperation = async (req, res) => {
     try {
 
-        if (!req.body.title || !req.body.description || !req.files || !req.body.date || !req.body.duration|| !req.body.connectionStartTime) {
+        if (!req.body.title || !req.body.description || !req.files || !req.body.date || !req.body.duration|| !req.body.connectionStartTime || !req.body.roles) {
             res.status(400).json({
                 success: false,
                 message: 'Missing required fields.'
@@ -85,6 +85,7 @@ exports.createOperation = async (req, res) => {
                 date: req.body.date,
                 duration: req.body.duration,
                 connectionStartTime: req.body.connectionStartTime,
+                roles: JSON.parse(req.body.roles)
             }, res);
 
             res.status(201).json({
