@@ -22,9 +22,11 @@ const userRoutes = require('./routes/user.route');
 const loginRoutes = require('./routes/login.route');
 const revokeRoutes = require('./routes/revoke.route');
 const trainingRoutes = require('./routes/training.route');
+const operationRoutes = require('./routes/operation.route');
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/trainings', trainingRoutes);
+app.use('/api/v1/operations', operationRoutes);
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/revoke', revokeRoutes);
 

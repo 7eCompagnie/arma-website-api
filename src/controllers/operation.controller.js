@@ -1,12 +1,12 @@
-const Training = require('../models/training.model');
+const Operation = require('../models/operation.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
-exports.getAllTrainings = async (req, res) => {
+exports.getAllOperations = async (req, res) => {
     try {
-        const data = await Training.getAllTrainings(req.query.page, res);
+        const data = await Operation.getAllOperations(req.query.page, res);
 
         res.status(200).json({
             success: true,
@@ -20,7 +20,7 @@ exports.getAllTrainings = async (req, res) => {
 
 exports.getMaxPages = async (req, res) => {
     try {
-        const data = await Training.getMaxPages(res);
+        const data = await Operation.getMaxPages(res);
 
         res.status(200).json({
             success: true,
@@ -32,14 +32,14 @@ exports.getMaxPages = async (req, res) => {
     }
 }
 
-exports.getTraining = async (req, res) => {
+exports.getOperation = async (req, res) => {
     try {
-        const data = await Training.getTraining(req.params._id, res);
+        const data = await Operation.getOperation(req.params._id, res);
 
         if (!data) {
             res.status(404).json({
                 success: false,
-                message: 'Training not found.'
+                message: 'Operation not found.'
             });
         } else {
             res.status(200).json({
@@ -53,15 +53,16 @@ exports.getTraining = async (req, res) => {
     }
 }
 
-exports.createTraining = async (req, res) => {
+exports.createOperation = async (req, res) => {
     try {
-        if (!req.body.title || !req.body.description || !req.files || !req.body.trainers || !req.body.isOpen) {
+
+        if (!req.body.title || !req.body.description || !req.files || !req.body.date || !req.body.duration|| !req.body.connectionStartTime) {
             res.status(400).json({
                 success: false,
                 message: 'Missing required fields.'
             });
         } else {
-            const newpath = __dirname + '/../../public/trainings';
+            const newpath = __dirname + '/../../public/operations';
             const file = req.files.picture;
             const filename = uuidv4();
             const re = /(?:\.([^.]+))?$/;
@@ -77,12 +78,13 @@ exports.createTraining = async (req, res) => {
                 }
             });
 
-            const data = await Training.createTraining({
+            const data = await Operation.createOperation({
                 title: req.body.title,
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
-                trainers: JSON.parse(req.body.trainers),
-                isOpen: req.body.isOpen === 'true'
+                date: req.body.date,
+                duration: req.body.duration,
+                connectionStartTime: req.body.connectionStartTime,
             }, res);
 
             res.status(201).json({
@@ -96,14 +98,14 @@ exports.createTraining = async (req, res) => {
     }
 }
 
-exports.updateTraining = async (req, res) => {
+exports.updateOperation = async (req, res) => {
     try {
-        const data = await Training.updateTraining(req.params._id, req.body, res);
+        const data = await Operation.updateOperation(req.params._id, req.body, res);
 
         if (!data) {
             res.status(404).json({
                 success: false,
-                message: 'Training not found.'
+                message: 'Operation not found.'
             });
         } else {
             res.status(200).json({
@@ -117,19 +119,20 @@ exports.updateTraining = async (req, res) => {
     }
 }
 
-exports.deleteTraining = async (req, res) => {
+exports.deleteOperation = async (req, res) => {
     try {
-        const oldTraining = await Training.getTraining(req.params._id, res);
-        const data = await Training.deleteTraining(req.params._id, res);
+        const oldOperation = await Operation.getOperation(req.params._id, res);
+        const data = await Operation.deleteOperation(req.params._id, res);
 
         if (data.deletedCount === 0) {
             res.status(404).json({
                 success: false,
-                message: 'Training not found.'
+                message: 'Operation not found.'
             });
         } else {
-            const path = __dirname + '/../../public/trainings';
-            fs.unlink(`${path}/${oldTraining.picture}`, (err) => {
+            const path = __dirname + '/../../public/operations';
+
+            fs.unlink(`${path}/${oldOperation.picture}`, (err) => {
                 if (err) {
                     console.log(err)
                     res.status(500).json({

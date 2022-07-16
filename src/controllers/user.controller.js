@@ -88,7 +88,9 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
+        console.log(req.body);
         const data = await User.updateUser(req.params.identifier, req.body, res);
+
         if (!data) {
             res.status(404).json({
                 success: false,
@@ -110,7 +112,7 @@ exports.deleteUser = async (req, res) => {
     try {
         const data = await User.deleteUser(req.params.identifier, res);
 
-        if (!data) {
+        if (data.deletedCount === 0) {
             res.status(404).json({
                 success: false,
                 message: 'User not found.'
