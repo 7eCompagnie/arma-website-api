@@ -8,6 +8,10 @@ let User = (user) => {
     this.avatar         = user.avatar;
 }
 
+User.getAllOfUsers = async (result) => {
+    return await database.db.collection('users').find({}).toArray();
+}
+
 User.getMaxPages = async (result) => {
     const perPage = 50;
     const total = await database.db.collection('users').count();

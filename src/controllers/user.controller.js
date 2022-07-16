@@ -2,6 +2,20 @@ const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 
+exports.getAllOfUsers = async (req, res) => {
+    try {
+        const data = await User.getAllOfUsers(res);
+
+        res.status(200).json({
+            success: true,
+            data: data
+        });
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 exports.getAllUsers = async (req, res) => {
     try {
         const data = await User.getAllUsers(req.query.page, res);
@@ -73,7 +87,15 @@ exports.createUser = async (req, res) => {
                 message: 'Missing required fields.'
             });
         } else {
-            const data = await User.createUser(req.body, res);
+            let toSend = req.body;
+
+            if (req.body.roles)
+                toSend.roles = req.body.roles;
+            else
+                toSend.roles = ["USER_ROLE"];
+
+            toSend.trained = [];
+            const data = await User.createUser(toSend, res);
 
             res.status(201).json({
                 success: true,
