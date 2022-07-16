@@ -1,6 +1,7 @@
 const Training = require('../models/training.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
+const { v4: uuidv4 } = require('uuid');
 
 exports.getAllTrainings = async (req, res) => {
     try {
@@ -53,13 +54,35 @@ exports.getTraining = async (req, res) => {
 
 exports.createTraining = async (req, res) => {
     try {
-        if (!req.body.title || !req.body.description || !req.body.picture || !req.body.trainers || !req.body.isOpen) {
+        if (!req.body.title || !req.body.description || !req.files.picture || !req.body.trainers || !req.body.isOpen) {
             res.status(400).json({
                 success: false,
                 message: 'Missing required fields.'
             });
         } else {
-            const data = await Training.createTraining(req.body, res);
+            const newpath = __dirname + '/../../public/trainings';
+            const file = req.files.picture;
+            const filename = uuidv4();
+            const re = /(?:\.([^.]+))?$/;
+            const ext = re.exec(file.name)[1];
+
+            file.mv(`${newpath}/${filename}.${ext}`, (err) => {
+                if (err) {
+                    console.log(err)
+                    res.status(500).json({
+                        success: false,
+                        message: err.message
+                    });
+                }
+            });
+
+            const data = await Training.createTraining({
+                title: req.body.title,
+                description: req.body.description,
+                picture: `${filename}.${ext}`,
+                trainers: JSON.parse(req.body.trainers),
+                isOpen: req.body.isOpen
+            }, res);
 
             res.status(201).json({
                 success: true,
