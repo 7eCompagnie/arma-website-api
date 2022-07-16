@@ -2,6 +2,7 @@ const Training = require('../models/training.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
 exports.getAllTrainings = async (req, res) => {
     try {
@@ -81,7 +82,7 @@ exports.createTraining = async (req, res) => {
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
                 trainers: JSON.parse(req.body.trainers),
-                isOpen: req.body.isOpen
+                isOpen: req.body.isOpen === 'true'
             }, res);
 
             res.status(201).json({
@@ -117,6 +118,7 @@ exports.updateTraining = async (req, res) => {
 
 exports.deleteTraining = async (req, res) => {
     try {
+        const oldTrainig = await Training.getTraining(req.params._id, res);
         const data = await Training.deleteTraining(req.params._id, res);
 
         if (!data) {
@@ -125,6 +127,16 @@ exports.deleteTraining = async (req, res) => {
                 message: 'Training not found.'
             });
         } else {
+            const path = __dirname + '/../../public/trainings';
+            fs.unlink(`${path}/${oldTrainig.picture}`, (err) => {
+                if (err) {
+                    console.log(err)
+                    res.status(500).json({
+                        success: false,
+                        message: err.message
+                    });
+                }
+            });
             res.status(200).json({
                 success: true,
                 data: data
