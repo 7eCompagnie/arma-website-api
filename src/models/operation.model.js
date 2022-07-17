@@ -23,6 +23,7 @@ Operation.getAllOperations = async (pageIndex, result) => {
     const startFrom = (page - 1) * perPage;
 
     return await database.db.collection('operations').find({})
+        .sort({'_id': -1})
         .skip(startFrom)
         .limit(perPage)
         .toArray();
