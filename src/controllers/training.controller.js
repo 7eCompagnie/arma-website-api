@@ -1,4 +1,5 @@
 const Training = require('../models/training.model');
+const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
@@ -138,6 +139,19 @@ exports.deleteTraining = async (req, res) => {
                     });
                 }
             });
+
+            const users = await User.getAllOfUsers();
+
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].trained.includes(oldTraining._id.toString())) {
+                    let newTrained = users[i].trained.filter(id => id !== oldTraining._id.toString());
+
+                    await User.updateUser(users[i].identifier, {
+                        trained: newTrained
+                    }, res);
+                }
+            }
+
             res.status(200).json({
                 success: true,
                 data: data
