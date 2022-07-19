@@ -30,9 +30,6 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 16.x
-          
-      - name: Install dependencies
-        run: yarn install --production
 
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
