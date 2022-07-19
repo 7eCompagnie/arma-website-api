@@ -131,17 +131,19 @@ exports.deleteOperation = async (req, res) => {
                 message: 'Operation not found.'
             });
         } else {
-            const path = __dirname + '/../../public/operations';
+            if (!oldOperation.picture.startsWith("http")) {
+                const path = __dirname + '/../../public/operations';
 
-            fs.unlink(`${path}/${oldOperation.picture}`, (err) => {
-                if (err) {
-                    console.log(err)
-                    res.status(500).json({
-                        success: false,
-                        message: err.message
-                    });
-                }
-            });
+                fs.unlink(`${path}/${oldOperation.picture}`, (err) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(500).json({
+                            success: false,
+                            message: err.message
+                        });
+                    }
+                });
+            }
             res.status(200).json({
                 success: true,
                 data: data

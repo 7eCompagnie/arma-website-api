@@ -129,16 +129,18 @@ exports.deleteTraining = async (req, res) => {
                 message: 'Training not found.'
             });
         } else {
-            const path = __dirname + '/../../public/trainings';
-            fs.unlink(`${path}/${oldTraining.picture}`, (err) => {
-                if (err) {
-                    console.log(err)
-                    res.status(500).json({
-                        success: false,
-                        message: err.message
-                    });
-                }
-            });
+            if (!oldTraining.picture.startsWith("http")) {
+                const path = __dirname + '/../../public/trainings';
+                fs.unlink(`${path}/${oldTraining.picture}`, (err) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(500).json({
+                            success: false,
+                            message: err.message
+                        });
+                    }
+                });
+            }
 
             const users = await User.getAllOfUsers();
 
