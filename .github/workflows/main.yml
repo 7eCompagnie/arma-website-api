@@ -32,7 +32,7 @@ jobs:
           node-version: 16.x
           
       - name: Install dependencies
-        run: npm install --production
+        run: yarn install
 
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
@@ -55,5 +55,5 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           script: |
             cd ~/7eCompagnie/api
-            npm install --production
+            yarn install
             pm2 restart api
