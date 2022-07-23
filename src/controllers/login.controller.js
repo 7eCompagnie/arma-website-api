@@ -35,7 +35,6 @@ exports.login = async (req, res) => {
                                 .then(data => {
                                     const newUserBody = {
                                         identifier: user.id,
-                                        email: user.email,
                                         username: user.username,
                                         discriminator: user.discriminator,
                                         avatar: user.avatar,
@@ -43,7 +42,6 @@ exports.login = async (req, res) => {
                                     }
                                     const userBody = {
                                         identifier: user.id,
-                                        email: user.email,
                                         username: user.username,
                                         discriminator: user.discriminator,
                                         avatar: user.avatar
@@ -53,7 +51,6 @@ exports.login = async (req, res) => {
                                             .then(data => {
                                                 const jwtToken = jwt.sign({
                                                     identifier: data.identifier,
-                                                    email: data.email,
                                                     username: data.username,
                                                     discriminator: data.discriminator,
                                                     avatar: data.avatar,
@@ -78,7 +75,6 @@ exports.login = async (req, res) => {
                                             .then(data => {
                                                 const jwtToken = jwt.sign({
                                                     identifier: data.identifier,
-                                                    email: data.email,
                                                     username: data.username,
                                                     discriminator: data.discriminator,
                                                     avatar: data.avatar,

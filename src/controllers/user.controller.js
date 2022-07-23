@@ -53,7 +53,7 @@ exports.getUser = async (req, res) => {
 
 exports.createUser = async (req, res) => {
     try {
-        if (!req.body.identifier || !req.body.email || !req.body.username || !req.body.discriminator || !req.body.avatar) {
+        if (!req.body.identifier || !req.body.username || !req.body.discriminator || !req.body.avatar) {
             res.status(400).json({
                 success: false,
                 message: 'Missing required fields.'
