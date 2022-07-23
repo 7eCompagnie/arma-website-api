@@ -38,7 +38,8 @@ exports.login = async (req, res) => {
                                         username: user.username,
                                         discriminator: user.discriminator,
                                         avatar: user.avatar,
-                                        roles: ['USER_ROLE']
+                                        roles: ['USER_ROLE'],
+                                        trained: []
                                     }
                                     const userBody = {
                                         identifier: user.id,
@@ -55,6 +56,7 @@ exports.login = async (req, res) => {
                                                     discriminator: data.discriminator,
                                                     avatar: data.avatar,
                                                     roles: data.roles,
+                                                    trained: data.trained,
                                                     accessToken: token,
                                                     tokenType: tokenType,
                                                     expiresIn: expiresIn,
