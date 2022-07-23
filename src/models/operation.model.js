@@ -17,16 +17,20 @@ Operation.getMaxPages = async (result) => {
     return Math.ceil(total / perPage);
 }
 
-Operation.getAllOperations = async (pageIndex, result) => {
+Operation.getOperations = async (pageIndex, result) => {
     const perPage = 50;
     const page = parseInt(pageIndex) || 1;
     const startFrom = (page - 1) * perPage;
 
-    return await database.db.collection('operations').find({})
-        .sort({'_id': -1})
-        .skip(startFrom)
-        .limit(perPage)
-        .toArray();
+    if (page === -1) {
+        return await database.db.collection('operations').find({}).toArray();
+    } else {
+        return await database.db.collection('operations').find({})
+            .sort({'_id': -1})
+            .skip(startFrom)
+            .limit(perPage)
+            .toArray();
+    }
 }
 
 Operation.getOperation = async (_id, result) => {

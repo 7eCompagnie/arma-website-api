@@ -3,9 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/user.controller');
 const verifyToken = require("../middlewares/auth");
 
-router.get('/', verifyToken, userController.getAllUsers);
-router.get('/all', verifyToken, userController.getAllOfUsers);
-router.get('/trainers', verifyToken, userController.getAllTrainers);
+router.get('/', verifyToken, userController.getUsers);
 router.get('/maxPages', verifyToken, userController.getMaxPages);
 router.get('/:identifier', verifyToken, userController.getUser);
 router.get('/token/:token', verifyToken, userController.getUserByToken);

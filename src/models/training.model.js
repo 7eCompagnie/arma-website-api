@@ -16,15 +16,19 @@ Training.getMaxPages = async (result) => {
     return Math.ceil(total / perPage);
 }
 
-Training.getAllTrainings = async (pageIndex, result) => {
+Training.getTrainings = async (pageIndex, result) => {
     const perPage = 50;
     const page = parseInt(pageIndex) || 1;
     const startFrom = (page - 1) * perPage;
 
-    return await database.db.collection('trainings').find({})
-        .skip(startFrom)
-        .limit(perPage)
-        .toArray();
+    if (page === -1)
+        return await database.db.collection('trainings').find({}).toArray();
+    else {
+        return await database.db.collection('trainings').find({})
+            .skip(startFrom)
+            .limit(perPage)
+            .toArray();
+    }
 }
 
 Training.getTraining = async (_id, result) => {

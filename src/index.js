@@ -1,7 +1,7 @@
 // Load modules
+require('dotenv').config();
 const express = require('express');
 const fileUpload = require('express-fileupload');
-const dotenv = require('dotenv').config();
 const cors = require('cors');
 const database = require('./configs/db.config');
 
@@ -11,11 +11,10 @@ const port = process.env.SERVER_PORT || 4000;
 
 app.use(express.json());
 app.use(cors());
-app.use(fileUpload());
+app.use(fileUpload( {}));
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 database.connect();
-
 
 // Routes
 const userRoutes = require('./routes/user.route');

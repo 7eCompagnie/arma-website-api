@@ -3,7 +3,7 @@ const router = express.Router();
 const operationController = require('../controllers/operation.controller');
 const verifyToken = require("../middlewares/auth");
 
-router.get('/', verifyToken, operationController.getAllOperations);
+router.get('/', verifyToken, operationController.getOperations);
 router.get('/maxPages', verifyToken, operationController.getMaxPages);
 router.get('/:_id', verifyToken, operationController.getOperation);
 router.post('/', verifyToken, operationController.createOperation);

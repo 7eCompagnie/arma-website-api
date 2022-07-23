@@ -3,7 +3,7 @@ const router = express.Router();
 const trainingController = require('../controllers/training.controller');
 const verifyToken = require("../middlewares/auth");
 
-router.get('/', verifyToken, trainingController.getAllTrainings);
+router.get('/', verifyToken, trainingController.getTrainings);
 router.get('/maxPages', verifyToken, trainingController.getMaxPages);
 router.get('/:_id', verifyToken, trainingController.getTraining);
 router.post('/', verifyToken, trainingController.createTraining);

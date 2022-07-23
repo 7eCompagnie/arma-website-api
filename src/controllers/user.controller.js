@@ -2,37 +2,9 @@ const User = require('../models/user.model');
 const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 
-exports.getAllOfUsers = async (req, res) => {
+exports.getUsers = async (req, res) => {
     try {
-        const data = await User.getAllOfUsers(res);
-
-        res.status(200).json({
-            success: true,
-            data: data
-        });
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-}
-
-exports.getAllUsers = async (req, res) => {
-    try {
-        const data = await User.getAllUsers(req.query.page, res);
-
-        res.status(200).json({
-            success: true,
-            data: data
-        });
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-}
-
-exports.getAllTrainers = async (req, res) => {
-    try {
-        const data = await User.getAllTrainers(res);
+        const data = await User.getUsers(req.query.page, res);
 
         res.status(200).json({
             success: true,

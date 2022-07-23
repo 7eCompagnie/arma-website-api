@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
+const {ObjectID} = require("mongodb");
 
-exports.getAllOperations = async (req, res) => {
+exports.getOperations = async (req, res) => {
     try {
-        const data = await Operation.getAllOperations(req.query.page, res);
+        const data = await Operation.getOperations(req.query.page, res);
 
         res.status(200).json({
             success: true,
@@ -34,6 +35,12 @@ exports.getMaxPages = async (req, res) => {
 
 exports.getOperation = async (req, res) => {
     try {
+        if (!ObjectID.isValid(req.params._id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid ID.'
+            });
+        }
         const data = await Operation.getOperation(req.params._id, res);
 
         if (!data) {
@@ -55,7 +62,8 @@ exports.getOperation = async (req, res) => {
 
 exports.createOperation = async (req, res) => {
     try {
-
+        console.log(req.body);
+        console.log(req.files);
         if (!req.body.title || !req.body.description || !req.files || !req.body.date || !req.body.duration|| !req.body.connectionStartTime || !req.body.roles) {
             res.status(400).json({
                 success: false,

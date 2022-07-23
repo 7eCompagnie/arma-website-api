@@ -5,9 +5,9 @@ const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
-exports.getAllTrainings = async (req, res) => {
+exports.getTrainings = async (req, res) => {
     try {
-        const data = await Training.getAllTrainings(req.query.page, res);
+        const data = await Training.getTrainings(req.query.page, res);
 
         res.status(200).json({
             success: true,

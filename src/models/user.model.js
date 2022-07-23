@@ -19,23 +19,20 @@ User.getMaxPages = async (result) => {
     return Math.ceil(total / perPage);
 }
 
-User.getAllUsers = async (pageIndex, result) => {
+User.getUsers = async (pageIndex, result) => {
     const perPage = 50;
     const page = parseInt(pageIndex) || 1;
     const startFrom = (page - 1) * perPage;
 
-    return await database.db.collection('users').find({})
-        .sort({"username": 1})
-        .skip(startFrom)
-        .limit(perPage)
-        .toArray();
-}
-
-User.getAllTrainers = async (result) => {
-
-    return await database.db.collection('users').find({roles: "TRAINER_ROLE"})
-        .sort({"username": 1})
-        .toArray();
+    if (page === -1) {
+        return await database.db.collection('users').find({}).toArray();
+    } else {
+        return await database.db.collection('users').find({})
+            .sort({"username": 1})
+            .skip(startFrom)
+            .limit(perPage)
+            .toArray();
+    }
 }
 
 User.getUser = async (identifier, result) => {
