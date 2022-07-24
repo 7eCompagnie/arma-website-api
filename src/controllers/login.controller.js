@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
                                         username: user.username,
                                         discriminator: user.discriminator,
                                         avatar: user.avatar,
-                                        roles: ['USER_ROLE'],
+                                        roles: ["VISITOR_ROLE"],
                                         trained: []
                                     }
                                     const userBody = {
