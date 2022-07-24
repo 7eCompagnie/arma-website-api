@@ -35,6 +35,10 @@ Training.getTraining = async (_id, result) => {
     return await database.db.collection('trainings').findOne({_id: ObjectId(_id)});
 }
 
+Training.getTrainingBySlug = async (slug, result) => {
+    return await database.db.collection('trainings').findOne({slug: slug});
+}
+
 Training.createTraining = async (training, result) => {
     await database.db.collection('trainings').insertOne(training);
     return await Training.getTraining(training._id, result);

@@ -35,14 +35,12 @@ exports.getMaxPages = async (req, res) => {
 
 exports.getTraining = async (req, res) => {
     try {
-        if (!ObjectID.isValid(req.params._id)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid ID.'
-            });
-        }
+        let data;
 
-        const data = await Training.getTraining(req.params._id, res);
+        if (ObjectID.isValid(req.params._id))
+            data = await Training.getTraining(req.params._id, res);
+        else
+            data = await Training.getTrainingBySlug(req.params._id, res);
 
         if (!data) {
             res.status(404).json({
@@ -87,7 +85,7 @@ exports.createTraining = async (req, res) => {
 
             const data = await Training.createTraining({
                 title: req.body.title,
-                slug: slugify(req.body.title),
+                slug: slugify(req.body.title).toLowerCase(),
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
                 trainers: JSON.parse(req.body.trainers),

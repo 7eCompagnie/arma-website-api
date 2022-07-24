@@ -37,6 +37,10 @@ Operation.getOperation = async (_id, result) => {
     return await database.db.collection('operations').findOne({_id: ObjectId(_id)});
 }
 
+Operation.getOperationBySlug = async (slug, result) => {
+    return await database.db.collection('operations').findOne({slug: slug});
+}
+
 Operation.createOperation = async (operation, result) => {
     await database.db.collection('operations').insertOne(operation);
     return await Operation.getOperation(operation._id, result);

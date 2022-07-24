@@ -36,13 +36,12 @@ exports.getMaxPages = async (req, res) => {
 
 exports.getOperation = async (req, res) => {
     try {
-        if (!ObjectID.isValid(req.params._id)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid ID.'
-            });
-        }
-        const data = await Operation.getOperation(req.params._id, res);
+        let data;
+
+        if (ObjectID.isValid(req.params._id))
+            data = await Operation.getOperation(req.params._id, res);
+        else
+            data = await Operation.getOperationBySlug(req.params._id, res);
 
         if (!data) {
             res.status(404).json({
@@ -89,7 +88,7 @@ exports.createOperation = async (req, res) => {
 
             const data = await Operation.createOperation({
                 title: req.body.title,
-                slug: slugify(req.body.title),
+                slug: slugify(req.body.title).toLowerCase(),
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
                 date: req.body.date,
