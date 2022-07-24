@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
+const {ObjectID} = require("mongodb");
 
 exports.getTrainings = async (req, res) => {
     try {
@@ -35,6 +36,13 @@ exports.getMaxPages = async (req, res) => {
 
 exports.getTraining = async (req, res) => {
     try {
+        if (!ObjectID.isValid(req.params._id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid ID.'
+            });
+        }
+
         const data = await Training.getTraining(req.params._id, res);
 
         if (!data) {
