@@ -8,7 +8,7 @@ const isSameUser = (req, res, next) => {
     if (decoded.identifier === req.params.identifier)
         return next();
     else {
-        return hasRole('HEAD_QUARTER_ROLE')(req, res, next);
+        return hasRole(['HEAD_QUARTER_ROLE'])(req, res, next);
     }
 }
 
