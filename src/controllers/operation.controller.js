@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const {ObjectID} = require("mongodb");
+const slugify = require('slugify');
 
 exports.getOperations = async (req, res) => {
     try {
@@ -88,6 +89,7 @@ exports.createOperation = async (req, res) => {
 
             const data = await Operation.createOperation({
                 title: req.body.title,
+                slug: slugify(req.body.title),
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
                 date: req.body.date,

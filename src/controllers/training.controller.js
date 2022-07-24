@@ -1,10 +1,9 @@
 const Training = require('../models/training.model');
 const User = require('../models/user.model');
-const jwt = require("jsonwebtoken");
-const dotenv = require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const {ObjectID} = require("mongodb");
+const slugify = require("slugify");
 
 exports.getTrainings = async (req, res) => {
     try {
@@ -88,6 +87,7 @@ exports.createTraining = async (req, res) => {
 
             const data = await Training.createTraining({
                 title: req.body.title,
+                slug: slugify(req.body.title),
                 description: req.body.description,
                 picture: `${filename}.${ext}`,
                 trainers: JSON.parse(req.body.trainers),
