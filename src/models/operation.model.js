@@ -25,7 +25,7 @@ Operation.getOperations = async (pageIndex, result) => {
     if (page === -1) {
         return await database.db.collection('operations')
             .aggregate([
-                {$sort: {date: -1}},
+                {$sort: {date: 1}},
                 {
                     $project: {
                         title: 1,
@@ -48,7 +48,7 @@ Operation.getOperations = async (pageIndex, result) => {
     } else {
         return await database.db.collection('operations')
             .aggregate([
-                {$sort: {date: -1}},
+                {$sort: {date: 1}},
                 {
                     $project: {
                         title: 1,
