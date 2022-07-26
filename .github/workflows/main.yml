@@ -41,8 +41,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            mv *.pem ../
             cd ~/7eCompagnie/api
+            mv *.pem ../
             rm -rf *
             mv ../*.pem .
 
