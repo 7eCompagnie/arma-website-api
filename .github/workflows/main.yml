@@ -41,8 +41,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            cd ~/7eCompagnie/api
-            rm -rf *
+            mkdir ~/7eCompagnie/api-deployments/${{ github.sha }}
+            cd ~/7eCompagnie/api-deployments/${{ github.sha }}
 
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
@@ -54,7 +54,7 @@ jobs:
           # Selecting all folders except "node_modules"
           source: ".,!node_modules"
           # The path is based on the directory where the user logged into the server starts
-          target: "~/7eCompagnie/api"
+          target: "~/7eCompagnie/api-deployments/${{ github.sha }}"
           
       - name: Install dependencies on VPS, run migrations on VPS and restart Node server
         uses: appleboy/ssh-action@master
@@ -64,6 +64,11 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            cd ~/7eCompagnie/api
+            cp ~/7eCompagnie/api/.env ~/7eCompagnie/api-deployments/${{ github.sha }}
+            cd ~/7eCompagnie/api-deployments/${{ github.sha }}
             yarn install --production
+            npm run build
+            ln -sf ~/7eCompagnie/api-deployments/${{ github.sha }}/* ~/7eCompagnie/api
             pm2 restart api
+            cd ~/7eCompagnie/api-deployments
+            rm -rf `ls -t | awk 'NR>3'`
