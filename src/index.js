@@ -33,8 +33,8 @@ app.use('/api/v1/revoke', revokeRoutes);
 
 if (process.env.NODE_ENV === 'production') {
     let options = {
-        key: fs.readFileSync('../key.pem'),
-        cert: fs.readFileSync('../cert.pem'),
+        key: fs.readFileSync('./key.pem'),
+        cert: fs.readFileSync('./cert.pem'),
     };
 
     https.createServer(options, app).listen(port, () => {
