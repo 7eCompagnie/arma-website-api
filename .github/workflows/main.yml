@@ -42,13 +42,7 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           script: |
             cd ~/7eCompagnie/api
-            [ -f cert.pem ] && mv cert.pem ../
-            [ -f key.pem ] && mv key.pem ../
-            [ -f csr.pem ] && mv csr.pem ../
             rm -rf *
-            [ -f ../cert.pem ] && mv ../cert.pem .
-            [ -f ../key.pem ] && mv ../key.pem .
-            [ -f ../csr.pem ] && mv ../csr.pem .
 
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
