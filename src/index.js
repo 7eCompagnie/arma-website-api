@@ -10,9 +10,7 @@ const app = express();
 const port = process.env.SERVER_PORT || 4000;
 
 app.use(express.json());
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors({origin: 'https://app.arma.la7e.fr'}));
 app.use(fileUpload( {}));
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
