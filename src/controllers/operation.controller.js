@@ -86,46 +86,53 @@ exports.createOperation = async (req, res) => {
                 }
             });
 
-            const data = await Operation.createOperation({
-                title: req.body.title,
-                slug: slugify(req.body.title).toLowerCase(),
-                description: req.body.description,
-                picture: `${filename}.${ext}`,
-                date: req.body.date,
-                duration: req.body.duration,
-                connectionStartTime: req.body.connectionStartTime,
-                roles: JSON.parse(req.body.roles),
-                serversInformations: JSON.parse(req.body.serversInformations)
-            }, res);
+            let slug = slugify(req.body.title).toLowerCase();
 
-            const cronDate = new Date(req.body.duration[1]);
-            const cronTime = `${cronDate.getMinutes()} ${cronDate.getHours()} ${cronDate.getDate()} ${cronDate.getMonth() + 1} ${cronDate.getDay()}`;
+            Operation.getOperationBySlug(slug).then(operation => {
+                if (operation !== null)
+                    slug = slug + '-' + uuidv4().split('-')[0];
 
-            cron.schedule(cronTime, () => {
-                const allUsers = User.getUsers(-1);
+                Operation.createOperation({
+                    title: req.body.title,
+                    slug: slug,
+                    description: req.body.description,
+                    picture: `${filename}.${ext}`,
+                    date: req.body.date,
+                    duration: req.body.duration,
+                    connectionStartTime: req.body.connectionStartTime,
+                    roles: JSON.parse(req.body.roles),
+                    serversInformations: JSON.parse(req.body.serversInformations)
+                }, res).then(data => {
+                    const cronDate = new Date(req.body.duration[1]);
+                    const cronTime = `${cronDate.getMinutes()} ${cronDate.getHours()} ${cronDate.getDate()} ${cronDate.getMonth() + 1} ${cronDate.getDay()}`;
 
-                allUsers.then(users => {
-                    users.forEach(user => {
-                        let userOperations = user.operations || [];
+                    cron.schedule(cronTime, () => {
+                        const allUsers = User.getUsers(-1);
 
-                        userOperations.forEach((operation, index) => {
-                            if (operation.operation === data._id.toString())
-                                operation.played = true;
-                        });
+                        allUsers.then(users => {
+                            users.forEach(user => {
+                                let userOperations = user.operations || [];
 
-                        User.updateUser(user.identifier, {
-                            operations: userOperations
+                                userOperations.forEach((operation, index) => {
+                                    if (operation.operation === data._id.toString())
+                                        operation.played = true;
+                                });
+
+                                User.updateUser(user.identifier, {
+                                    operations: userOperations
+                                }).catch(err => console.log(err));
+                            });
                         }).catch(err => console.log(err));
+                    },{
+                        scheduled: true,
                     });
-                }).catch(err => console.log(err));
-            },{
-                scheduled: true,
-            });
 
-            res.status(201).json({
-                success: true,
-                data: data
-            });
+                    res.status(201).json({
+                        success: true,
+                        data: data
+                    });
+                });
+            }).catch(err => console.log(err));
         }
     } catch (err) {
         console.log(err);
