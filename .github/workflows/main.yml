@@ -41,8 +41,10 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
+            mv *.pem ../
             cd ~/7eCompagnie/api
             rm -rf *
+            mv ../*.pem .
 
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master

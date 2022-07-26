@@ -22,6 +22,8 @@ const loginRoutes = require('./routes/login.route');
 const revokeRoutes = require('./routes/revoke.route');
 const trainingRoutes = require('./routes/training.route');
 const operationRoutes = require('./routes/operation.route');
+const fs = require("fs");
+const https = require("https");
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/trainings', trainingRoutes);
@@ -29,6 +31,18 @@ app.use('/api/v1/operations', operationRoutes);
 app.use('/api/v1/login', loginRoutes);
 app.use('/api/v1/revoke', revokeRoutes);
 
-app.listen(port, () => {
-    console.log(`[SUCCESS] => Server is running on port ${port}.`);
-});
+if (process.env.NODE_ENV === 'production') {
+    let options = {
+        key: fs.readFileSync('../key.pem'),
+        cert: fs.readFileSync('../cert.pem'),
+    };
+
+    https.createServer(options, app).listen(port, () => {
+        console.log(`[SUCCESS] => Server running on port ${port}`);
+    });
+} else {
+    app.listen(port, () => {
+        console.log(`[SUCCESS] => Server is running on port ${port}.`);
+    });
+
+}
