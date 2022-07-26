@@ -23,12 +23,50 @@ Operation.getOperations = async (pageIndex, result) => {
     const startFrom = (page - 1) * perPage;
 
     if (page === -1) {
-        return await database.db.collection('operations').find({}).toArray();
+        return await database.db.collection('operations')
+            .aggregate([
+                {$sort: {date: -1}},
+                {
+                    $project: {
+                        title: 1,
+                        description: 1,
+                        picture: 1,
+                        duration: 1,
+                        connectionStartTime: 1,
+                        slug: 1,
+                        roles: 1,
+                        serversInformations: 1,
+                        date: {
+                            $dateFromString: {
+                                dateString: '$date'
+                            }
+                        },
+                    }
+                }
+            ])
+            .toArray();
     } else {
-        return await database.db.collection('operations').find({})
-            .sort({'_id': -1})
-            .skip(startFrom)
-            .limit(perPage)
+        return await database.db.collection('operations')
+            .aggregate([
+                {$sort: {date: -1}},
+                {
+                    $project: {
+                        title: 1,
+                        description: 1,
+                        picture: 1,
+                        duration: 1,
+                        connectionStartTime: 1,
+                        slug: 1,
+                        roles: 1,
+                        serversInformations: 1,
+                        date: {
+                            $dateFromString: {
+                                dateString: '$date'
+                            }
+                        },
+                    }
+                }
+            ])
             .toArray();
     }
 }

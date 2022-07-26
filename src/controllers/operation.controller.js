@@ -5,6 +5,8 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const {ObjectID} = require("mongodb");
 const slugify = require('slugify');
+const cron = require("node-cron");
+const User = require("../models/user.model");
 
 exports.getOperations = async (req, res) => {
     try {
@@ -96,6 +98,30 @@ exports.createOperation = async (req, res) => {
                 serversInformations: JSON.parse(req.body.serversInformations)
             }, res);
 
+            const cronDate = new Date(req.body.duration[1]);
+            const cronTime = `${cronDate.getMinutes()} ${cronDate.getHours()} ${cronDate.getDate()} ${cronDate.getMonth() + 1} ${cronDate.getDay()}`;
+
+            cron.schedule(cronTime, () => {
+                const allUsers = User.getUsers(-1);
+
+                allUsers.then(users => {
+                    users.forEach(user => {
+                        let userOperations = user.operations || [];
+
+                        userOperations.forEach((operation, index) => {
+                            if (operation.operation === data._id.toString())
+                                operation.played = true;
+                        });
+
+                        User.updateUser(user.identifier, {
+                            operations: userOperations
+                        }).catch(err => console.log(err));
+                    });
+                }).catch(err => console.log(err));
+            },{
+                scheduled: true,
+            });
+
             res.status(201).json({
                 success: true,
                 data: data
@@ -109,6 +135,8 @@ exports.createOperation = async (req, res) => {
 
 exports.updateOperation = async (req, res) => {
     try {
+        if (req.body.title)
+            req.body.slug = slugify(req.body.title).toLowerCase();
         const data = await Operation.updateOperation(req.params._id, req.body, res);
 
         if (!data) {
@@ -152,6 +180,23 @@ exports.deleteOperation = async (req, res) => {
                     }
                 });
             }
+
+            const allUsers = User.getUsers(-1);
+
+            allUsers.then(users => {
+                users.forEach(user => {
+                    let userOperations = user.operations || [];
+
+                    userOperations.forEach((operation, index) => {
+                        if (operation.operation === req.params._id)
+                            userOperations.splice(index, 1);
+                    });
+
+                    User.updateUser(user.identifier, {
+                        operations: userOperations
+                    }).catch(err => console.log(err));
+                });
+            })
             res.status(200).json({
                 success: true,
                 data: data
